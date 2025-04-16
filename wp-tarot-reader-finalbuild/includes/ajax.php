@@ -8,8 +8,8 @@ function tarot_enqueue_assets() {
         global $post;
         wp_localize_script('tarot-js', 'tarotAjax', [
             'ajax_url' => admin_url('admin-ajax.php'),
-            'post_id' => $post->ID,
-            'bg_url' => get_post_meta($post->ID, 'tarot_background_url', true)
+            'post_id'  => $post->ID,
+            'bg_url'   => get_post_meta($post->ID, 'tarot_background_url', true)
         ]);
     }
 }
@@ -26,14 +26,15 @@ function tarot_handle_draw() {
         'temperance'=>'節制','devil'=>'悪魔','tower'=>'塔','star'=>'星','moon'=>'月','sun'=>'太陽',
         'judgement'=>'審判','world'=>'世界'
     ];
-    
+
     $post_id = intval($_POST['post_id'] ?? 0);
     $keys = array_keys($jp);
     $selected = $keys[array_rand($keys)];
-    $meaning = get_post_meta($post_id, 'tarot_meaning_' . $selected, true);
-    $banner = get_post_meta($post_id, 'tarot_affiliate_html', true);
 
-    // 🔗 カード画像の紐付け（tarot_card 投稿から取得）
+    // ① 意味を取得
+    $meaning = get_post_meta($post_id, 'tarot_meaning_' . $selected, true);
+    
+    // ② カード画像（tarot_card のスラッグと一致）
     $args = [
         'post_type' => 'tarot_card',
         'name' => $selected,
@@ -44,6 +45,9 @@ function tarot_handle_draw() {
     if ($cards && has_post_thumbnail($cards[0]->ID)) {
         $image_url = get_the_post_thumbnail_url($cards[0]->ID, 'medium');
     }
+
+    // ③ バナー取得
+    $banner = get_post_meta($post_id, 'tarot_affiliate_html', true);
 
     wp_send_json([
         'card' => $jp[$selected],
