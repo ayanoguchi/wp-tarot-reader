@@ -20,7 +20,8 @@ add_action('save_post', 'wp_tarot_save_background');
 function wp_tarot_enqueue_admin_assets($hook) {
     if ($hook === 'post.php' || $hook === 'post-new.php') {
         wp_enqueue_media();
-        wp_enqueue_script('tarot-admin', plugins_url('../assets/js/tarot-admin.js', __FILE__), ['jquery'], null, true);
+        wp_enqueue_script('tarot-admin', plugin_dir_url(__FILE__) . '../assets/js/tarot-admin.js', ['jquery'], null, true);
+
     }
 }
 add_action('admin_enqueue_scripts', 'wp_tarot_enqueue_admin_assets');
