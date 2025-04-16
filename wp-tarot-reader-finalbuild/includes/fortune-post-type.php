@@ -1,12 +1,15 @@
 <?php
 if (!defined('ABSPATH')) exit;
 function wp_tarot_register_fortune_post_type() {
-    register_post_type('tarot_fortune', [
-        'labels' => ['name' => 'タロット占い', 'singular_name' => 'タロット占い'],
-        'public' => true, 'has_archive' => true, 'show_in_rest' => true,
-        'supports' => ['title', 'editor', 'custom-fields', 'thumbnail'],
-        'taxonomies' => ['category'], 'menu_icon' => 'dashicons-format-status'
-    ]);
+register_post_type('tarot_fortune', [
+    'labels' => ['name' => 'タロット占い', 'singular_name' => 'タロット占い'],
+    'public' => true,
+    'has_archive' => true,
+    'show_in_rest' => true,
+    'supports' => ['title', 'editor', 'custom-fields', 'thumbnail'],
+    'taxonomies' => ['category'], // ← これを必ず追加！
+    'menu_icon' => 'dashicons-format-status'
+]);
 }
 add_action('init', 'wp_tarot_register_fortune_post_type');
 function wp_tarot_add_fortune_meta_boxes() {
